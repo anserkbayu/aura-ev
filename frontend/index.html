@@ -1,0 +1,2721 @@
+<!doctype html>
+<html lang="i   d">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="AURA EV - Premium Electric Vehicle Marketplace Indonesia. Temukan mobil, motor, sepeda, dan truk listrik terbaik dengan teknologi terdepan."
+    />
+    <meta
+      property="og:title"
+      content="AURA EV - Premium Electric Vehicle Marketplace"
+    />
+    <meta
+      property="og:description"
+      content="Marketplace kendaraan listrik premium Indonesia"
+    />
+    <meta property="og:type" content="website" />
+    <title>AURA EV - Premium Electric Vehicle Marketplace</title>
+    <link rel="icon" type="image/png" href="images/Aura_EV_Logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+      /* ============================================
+           LOADING OVERLAY
+           ============================================ */
+      #loading-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(10, 10, 10, 0.95);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        flex-direction: column;
+        gap: 1.2rem;
+        backdrop-filter: blur(4px);
+      }
+
+      #loading-overlay.show {
+        display: flex;
+      }
+
+      .loading-spinner-ring {
+        width: 56px;
+        height: 56px;
+        border: 4px solid rgba(74, 144, 217, 0.2);
+        border-top-color: #4a90d9;
+        border-radius: 50%;
+        animation: spinRing 0.9s linear infinite;
+      }
+
+      @keyframes spinRing {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+        color: #4a90d9;
+      }
+
+      .loading-sub {
+        font-family: "Barlow", sans-serif;
+        font-size: 0.85rem;
+        color: #a0a0a0;
+      }
+
+      /* ============================================
+           AUTH VIEW
+           ============================================ */
+      #auth-view {
+        display: none;
+        font-family: "Barlow", sans-serif;
+        background: #0a0a0a;
+        color: #ffffff;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        overflow-y: auto;
+      }
+
+      #auth-view.active {
+        display: flex;
+      }
+
+      #auth-view::before {
+        content: "";
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background:
+          radial-gradient(
+            ellipse at 30% 40%,
+            rgba(74, 144, 217, 0.08) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 70% 60%,
+            rgba(74, 144, 217, 0.05) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .auth-container {
+        width: 100%;
+        max-width: 440px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .auth-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 3rem;
+        text-align: center;
+        letter-spacing: 4px;
+        margin-bottom: 0.3rem;
+      }
+
+      .auth-logo span {
+        color: #4a90d9;
+      }
+
+      .auth-subtitle {
+        text-align: center;
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        margin-bottom: 2.5rem;
+        transition: all 0.3s;
+      }
+
+      /* Card with animated switch */
+      .auth-card {
+        background: #1a1a1a;
+        border-radius: 16px;
+        padding: 2.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        animation: authCardIn 0.35s ease;
+      }
+
+      @keyframes authCardIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .auth-card-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+        margin-bottom: 1.8rem;
+        color: #ffffff;
+      }
+
+      .auth-form-group {
+        margin-bottom: 1.3rem;
+      }
+
+      .auth-form-group label {
+        display: block;
+        font-size: 0.85rem;
+        color: #a0a0a0;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .auth-form-group input {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #ffffff;
+        font-family: "Barlow", sans-serif;
+        font-size: 1rem;
+        transition: all 0.3s;
+      }
+
+      .auth-form-group input:focus {
+        outline: none;
+        border-color: #4a90d9;
+        background: rgba(74, 144, 217, 0.05);
+        box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.1);
+      }
+
+      .auth-form-group input::placeholder {
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      .password-hint {
+        font-size: 0.78rem;
+        color: #a0a0a0;
+        margin-top: 0.4rem;
+      }
+
+      .auth-alert {
+        padding: 0.9rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 1.3rem;
+        display: none;
+      }
+
+      .auth-alert.error {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+      }
+
+      .auth-alert.success {
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #22c55e;
+      }
+
+      .auth-alert.show {
+        display: block;
+      }
+
+      .auth-btn {
+        width: 100%;
+        padding: 1rem;
+        background: #4a90d9;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 0.5rem;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+      }
+
+      .auth-btn:hover:not(:disabled) {
+        background: #3a7bc8;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(74, 144, 217, 0.35);
+      }
+
+      .auth-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .auth-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 1.5rem 0;
+        color: #a0a0a0;
+        font-size: 0.85rem;
+      }
+
+      .auth-divider::before,
+      .auth-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .auth-links {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #a0a0a0;
+      }
+
+      .auth-links a {
+        color: #4a90d9;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      .auth-links a:hover {
+        color: #3a7bc8;
+      }
+
+      /* Inline spinner */
+      .btn-spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spinRing 0.8s linear infinite;
+        margin-right: 8px;
+        vertical-align: middle;
+      }
+
+      /* Register success state */
+      .register-success {
+        text-align: center;
+        padding: 1rem 0;
+      }
+
+      .success-icon {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .register-success h3 {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+        margin-bottom: 0.8rem;
+        color: #22c55e;
+      }
+
+      .register-success p {
+        color: #a0a0a0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      /* ============================================
+           MAIN VIEW
+           ============================================ */
+      #main-view {
+        display: none;
+      }
+
+      #main-view.active {
+        display: block;
+      }
+
+      /* ============================================
+           CATEGORY VIEW
+           ============================================ */
+      #category-view {
+        display: none;
+      }
+
+      #category-view.active {
+        display: block;
+      }
+
+      .category-hero {
+        padding-top: 80px;
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(
+          135deg,
+          var(--dark-bg) 0%,
+          var(--dark-card) 50%,
+          var(--dark-bg) 100%
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .category-hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+          radial-gradient(
+            ellipse at 20% 50%,
+            rgba(74, 144, 217, 0.12) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse at 80% 50%,
+            rgba(74, 144, 217, 0.08) 0%,
+            transparent 60%
+          );
+        pointer-events: none;
+      }
+
+      .category-hero-lines {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .category-hero-lines::before,
+      .category-hero-lines::after {
+        content: "";
+        position: absolute;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(74, 144, 217, 0.4),
+          transparent
+        );
+        animation: lineSlide 4s linear infinite;
+        width: 100%;
+      }
+
+      .category-hero-lines::before {
+        top: 40%;
+        animation-delay: 0s;
+      }
+
+      .category-hero-lines::after {
+        top: 60%;
+        animation-delay: 2s;
+      }
+
+      @keyframes lineSlide {
+        0% {
+          transform: translateX(-100%);
+        }
+
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .category-hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 3rem 0;
+      }
+
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text-gray);
+      }
+
+      .breadcrumb a {
+        color: var(--text-gray);
+        text-decoration: none;
+        transition: color 0.3s;
+        cursor: pointer;
+      }
+
+      .breadcrumb a:hover {
+        color: #4a90d9;
+      }
+
+      .breadcrumb span {
+        color: #4a90d9;
+      }
+
+      .breadcrumb-sep {
+        color: rgba(255, 255, 255, 0.2);
+      }
+
+      .category-page-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 4rem;
+        letter-spacing: 4px;
+        color: var(--text-light);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+      }
+
+      .category-page-title span {
+        color: #4a90d9;
+      }
+
+      .category-page-subtitle {
+        color: var(--text-gray);
+        font-size: 1rem;
+      }
+
+      .product-count-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(74, 144, 217, 0.15);
+        border: 1px solid rgba(74, 144, 217, 0.3);
+        color: #4a90d9;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-top: 1rem;
+      }
+
+      .products-section {
+        padding: 4rem 0 6rem;
+        background: var(--dark-bg);
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+      }
+
+      .product-card {
+        background: var(--dark-card);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+      }
+
+      .product-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #4a90d9, transparent);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(74, 144, 217, 0.4);
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.5),
+          0 0 30px rgba(74, 144, 217, 0.1);
+      }
+
+      .product-card:hover::before {
+        opacity: 1;
+      }
+
+      .product-image-wrap {
+        position: relative;
+        height: 220px;
+        background: linear-gradient(
+          135deg,
+          var(--dark-bg) 0%,
+          var(--dark-card) 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .product-image-wrap::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(to top, var(--dark-card), transparent);
+      }
+
+      .product-img {
+        max-width: 85%;
+        max-height: 85%;
+        object-fit: contain;
+        transition: transform 0.4s ease;
+        position: relative;
+        z-index: 1;
+      }
+
+      .product-card:hover .product-img {
+        transform: scale(1.06);
+      }
+
+      .stock-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 2;
+      }
+
+      .stock-badge.in-stock {
+        background: rgba(34, 197, 94, 0.2);
+        border: 1px solid rgba(34, 197, 94, 0.5);
+        color: #22c55e;
+      }
+
+      .stock-badge.low-stock {
+        background: rgba(234, 179, 8, 0.2);
+        border: 1px solid rgba(234, 179, 8, 0.5);
+        color: #eab308;
+      }
+
+      .stock-badge.out-of-stock {
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.5);
+        color: #ef4444;
+      }
+
+      .product-body {
+        padding: 1.5rem;
+      }
+
+      .product-brand {
+        font-size: 0.8rem;
+        color: #4a90d9;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 0.4rem;
+      }
+
+      .product-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        margin-bottom: 1rem;
+        line-height: 1.1;
+      }
+
+      .product-specs-mini {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .spec-mini {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 6px;
+        padding: 0.5rem 0.7rem;
+      }
+
+      .spec-mini-label {
+        font-size: 0.7rem;
+        color: var(--text-gray);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.2rem;
+      }
+
+      .spec-mini-value {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-light);
+      }
+
+      .product-colors {
+        display: flex;
+        gap: 0.4rem;
+        margin-bottom: 1.2rem;
+        align-items: center;
+      }
+
+      .product-color-dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: transform 0.2s;
+      }
+
+      .product-color-dot:hover {
+        transform: scale(1.2);
+        border-color: #4a90d9;
+      }
+
+      .product-colors-more {
+        font-size: 0.75rem;
+        color: var(--text-gray);
+        margin-left: 0.2rem;
+      }
+
+      .product-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .product-price {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+        color: #4a90d9;
+      }
+
+      .btn-order-card {
+        background: #4a90d9;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-order-card:hover {
+        background: #3a7bc8;
+        box-shadow: 0 0 20px rgba(74, 144, 217, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .cat-loading-state {
+        text-align: center;
+        padding: 5rem 0;
+      }
+
+      .cat-empty-state {
+        text-align: center;
+        padding: 5rem 0;
+        color: var(--text-gray);
+      }
+
+      .cat-empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-light);
+      }
+
+      /* Category order modal */
+      .modal-product-info {
+        background: rgba(74, 144, 217, 0.08);
+        border: 1px solid rgba(74, 144, 217, 0.2);
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .modal-product-img {
+        width: 80px;
+        height: 60px;
+        object-fit: contain;
+      }
+
+      .modal-product-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+      }
+
+      .modal-product-price {
+        color: #4a90d9;
+        font-size: 0.9rem;
+      }
+
+      .modal-color-picker {
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-color-picker label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #a0a0a0;
+        font-size: 0.9rem;
+      }
+
+      .modal-color-options {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .modal-color-opt {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .modal-color-opt.active {
+        border-color: #4a90d9;
+        box-shadow: 0 0 10px rgba(74, 144, 217, 0.5);
+      }
+
+      .modal-color-opt:hover {
+        transform: scale(1.1);
+      }
+
+      .color-name-display {
+        font-size: 0.8rem;
+        color: #4a90d9;
+        margin-top: 0.4rem;
+        min-height: 1rem;
+      }
+
+      @media (max-width: 900px) {
+        .category-page-title {
+          font-size: 2.8rem;
+        }
+
+        .products-grid {
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        }
+      }
+
+      @media (max-width: 600px) {
+        .category-page-title {
+          font-size: 2.2rem;
+        }
+
+        .products-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ============================================
+         LOADING OVERLAY
+         ============================================ -->
+    <div id="loading-overlay">
+      <div class="loading-spinner-ring"></div>
+      <div class="loading-text" id="loading-title">MEMPROSES</div>
+      <div class="loading-sub" id="loading-sub">Mohon tunggu sebentar...</div>
+    </div>
+
+    <!-- ============================================
+         AUTH VIEW  (Login & Register in one place)
+         ============================================ -->
+    <div id="auth-view">
+      <div class="auth-container">
+        <div class="auth-logo">AURA<span>EV</span></div>
+        <p class="auth-subtitle" id="authSubtitle">Masuk ke akun kamu</p>
+
+        <!-- ── LOGIN PANEL ── -->
+        <div id="login-panel" class="auth-card">
+          <div class="auth-card-title">LOGIN</div>
+
+          <div class="auth-alert error" id="loginAlertError"></div>
+          <div class="auth-alert success" id="loginAlertSuccess"></div>
+
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="auth-form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="email@contoh.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <div class="auth-form-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+            <button type="submit" class="auth-btn" id="loginBtn">MASUK</button>
+          </form>
+
+          <div class="auth-divider">atau</div>
+          <div class="auth-links">
+            Belum punya akun?&nbsp;<a onclick="showRegister()"
+              >Daftar sekarang</a
+            >
+          </div>
+        </div>
+        <!-- /login-panel -->
+
+        <!-- ── REGISTER PANEL ── -->
+        <div id="register-panel" class="auth-card" style="display: none">
+          <!-- Form state -->
+          <div id="registerFormState">
+            <div class="auth-card-title">DAFTAR</div>
+
+            <div class="auth-alert error" id="registerAlertError"></div>
+
+            <form id="registerForm" onsubmit="handleRegister(event)">
+              <div class="auth-form-group">
+                <label>Nama Lengkap</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  placeholder="Nama lengkap kamu"
+                  required
+                  autocomplete="name"
+                />
+              </div>
+              <div class="auth-form-group">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="email@contoh.com"
+                  required
+                  autocomplete="email"
+                />
+              </div>
+              <div class="auth-form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="••••••••"
+                  required
+                  autocomplete="new-password"
+                  minlength="6"
+                />
+                <div class="password-hint">Minimal 6 karakter</div>
+              </div>
+              <div class="auth-form-group">
+                <label>Konfirmasi Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="••••••••"
+                  required
+                  autocomplete="new-password"
+                />
+              </div>
+              <button type="submit" class="auth-btn" id="registerBtn">
+                DAFTAR SEKARANG
+              </button>
+            </form>
+
+            <div class="auth-divider">atau</div>
+            <div class="auth-links">
+              Sudah punya akun?&nbsp;<a onclick="showLogin()">Login di sini</a>
+            </div>
+          </div>
+          <!-- /registerFormState -->
+
+          <!-- Success state -->
+          <div
+            class="register-success"
+            id="registerSuccessState"
+            style="display: none"
+          >
+            <div class="success-icon">✅</div>
+            <h3>PENDAFTARAN BERHASIL!</h3>
+            <p>
+              Akun kamu sudah dibuat.<br />
+              Silakan cek email <strong id="registeredEmail"></strong>
+              untuk konfirmasi, lalu login.
+            </p>
+            <a onclick="showLogin()" class="auth-btn">PERGI KE LOGIN</a>
+          </div>
+        </div>
+        <!-- /register-panel -->
+      </div>
+    </div>
+    <!-- /auth-view -->
+
+    <!-- ============================================
+         MAIN SITE VIEW
+         ============================================ -->
+    <div id="main-view">
+      <!-- NAVIGATION -->
+      <nav class="navbar">
+        <div class="nav-container">
+          <div class="nav-logo">AURA<span>EV</span></div>
+          <div class="nav-links">
+            <a href="#home">BERANDA</a>
+            <a href="#kategori">KATEGORI</a>
+            <a href="#katalog">KATALOG</a>
+            <a href="#kontak">KONTAK</a>
+          </div>
+          <div
+            class="nav-cta"
+            style="display: flex; align-items: center; gap: 0.75rem"
+          >
+            <div class="nav-search">
+              <button
+                type="button"
+                class="search-toggle-btn"
+                onclick="toggleSearch(this)"
+                aria-label="Cari kendaraan"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+              <div class="search-box">
+                <input
+                  type="text"
+                  class="search-input"
+                  placeholder="Cari kendaraan..."
+                  oninput="handleSearchInput(this)"
+                  onkeydown="handleSearchKeydown(event, this)"
+                  onclick="event.stopPropagation()"
+                />
+              </div>
+              <div class="search-results"></div>
+            </div>
+            <button
+              onclick="openCartModal()"
+              class="cart-toggle-btn"
+              aria-label="Keranjang belanja"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path
+                  d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                />
+              </svg>
+              <span class="cart-badge" id="cartBadgeMain">0</span>
+            </button>
+            <button
+              onclick="toggleTheme()"
+              class="theme-toggle-btn"
+              aria-label="Toggle theme"
+            >
+              <span class="theme-toggle-track">
+                <span class="theme-toggle-thumb">
+                  <img
+                    src="images/darkmode.svg"
+                    class="theme-icon"
+                    alt="Theme icon"
+                  />
+                </span>
+              </span>
+            </button>
+            <button
+              onclick="handleLogout()"
+              style="
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: white;
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.85rem;
+                transition: all 0.3s;
+              "
+              onmouseover="this.style.borderColor = '#4a90d9'"
+              onmouseout="this.style.borderColor = 'rgba(255,255,255,0.3)'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              LOGOUT
+            </button>
+          </div>
+          <button
+            class="hamburger"
+            onclick="toggleMobileMenu()"
+            aria-label="Toggle menu"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- MOBILE DRAWER -->
+      <div class="mobile-drawer" id="mobileDrawer">
+        <div class="drawer-content">
+          <button class="drawer-close" onclick="toggleMobileMenu()">
+            &times;
+          </button>
+          <div class="drawer-logo">AURA<span>EV</span></div>
+          <div
+            style="display: flex; align-items: center; gap: 0.5rem; width: 100%"
+          >
+            <div class="nav-search drawer-search" style="flex: 1">
+              <input
+                type="text"
+                class="search-input"
+                placeholder="Cari kendaraan..."
+                oninput="handleSearchInput(this)"
+                onkeydown="handleSearchKeydown(event, this)"
+              />
+              <div class="search-results"></div>
+            </div>
+            <button
+              onclick="
+                openCartModal();
+                toggleMobileMenu();
+              "
+              class="cart-toggle-btn"
+              aria-label="Keranjang belanja"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path
+                  d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                />
+              </svg>
+              <span class="cart-badge" id="cartBadgeDrawer">0</span>
+            </button>
+          </div>
+          <div class="drawer-links">
+            <a href="#home" onclick="toggleMobileMenu()">BERANDA</a>
+            <a href="#kategori" onclick="toggleMobileMenu()">KATEGORI</a>
+            <a href="#katalog" onclick="toggleMobileMenu()">KATALOG</a>
+            <a href="#kontak" onclick="toggleMobileMenu()">KONTAK</a>
+          </div>
+          <button
+            class="btn-primary"
+            onclick="
+              openOrderModal();
+              toggleMobileMenu();
+            "
+          >
+            PESAN SEKARANG
+          </button>
+        </div>
+      </div>
+      <div
+        class="drawer-overlay"
+        id="drawerOverlay"
+        onclick="toggleMobileMenu()"
+      ></div>
+
+      <!-- HERO -->
+      <section id="home" class="hero">
+        <video class="hero-video" autoplay muted loop playsinline>
+          <source src="images/sinematik.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">MASA DEPAN MOBILITAS</h1>
+          <p class="hero-subtitle">Kendaraan Listrik Premium untuk Indonesia</p>
+          <button
+            class="btn-hero"
+            onclick="
+              document
+                .getElementById('katalog')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            JELAJAHI KOLEKSI
+          </button>
+        </div>
+      </section>
+
+      <!-- KATEGORI -->
+      <section id="kategori" class="categories">
+        <div class="container">
+          <h2 class="section-title">KATEGORI KENDARAAN</h2>
+          <div class="category-grid" id="categoryGrid">
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+            <div class="category-skeleton"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- KATALOG -->
+      <section id="katalog" class="catalog">
+        <div class="container">
+          <h2 class="section-title">KOLEKSI PREMIUM</h2>
+
+          <div class="catalog-loading" id="catalogLoading">
+            <div class="spinner"></div>
+            <p>Memuat produk...</p>
+          </div>
+
+          <div
+            class="catalog-content"
+            id="catalogContent"
+            style="display: none"
+          >
+            <div class="car-display">
+              <div class="car-image-container">
+                <img
+                  id="carImage"
+                  src=""
+                  alt="Car"
+                  class="car-image"
+                  loading="lazy"
+                />
+                <div class="image-skeleton" id="imageSkeleton"></div>
+              </div>
+              <div class="bg-lines" id="bgLines"></div>
+            </div>
+
+            <div class="car-info">
+              <h3 class="car-name" id="carName">-</h3>
+              <div class="car-specs" id="carSpecs"></div>
+              <div class="color-picker">
+                <p class="color-label">PILIH WARNA:</p>
+                <div class="color-options" id="colorOptions"></div>
+              </div>
+              <div class="car-actions">
+                <button class="btn-primary" onclick="openOrderModal()">
+                  BELI SEKARANG
+                </button>
+                <button class="btn-secondary" onclick="openTestDriveModal()">
+                  PESAN TEST DRIVE
+                </button>
+              </div>
+            </div>
+
+            <div class="car-slider">
+              <button
+                class="slider-btn prev"
+                onclick="prevCar()"
+                aria-label="Previous"
+              >
+                ‹
+              </button>
+              <div class="slider-track" id="sliderTrack"></div>
+              <button
+                class="slider-btn next"
+                onclick="nextCar()"
+                aria-label="Next"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- KONTAK -->
+      <section id="kontak" class="contact">
+        <div class="container">
+          <h2 class="section-title">HUBUNGI KAMI</h2>
+          <div class="contact-content">
+            <div class="contact-info">
+              <h3>AURA EV</h3>
+              <p>Premium Electric Vehicle Marketplace</p>
+              <div class="contact-details">
+                <p>📍 Jakarta, Indonesia</p>
+                <p>📞 +62 21 1234 5678</p>
+                <p>✉️ info@auraev.id</p>
+              </div>
+            </div>
+            <form
+              class="contact-form"
+              id="contactForm"
+              onsubmit="submitContact(event)"
+            >
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Nama Lengkap *"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email *"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <input type="tel" name="phone" placeholder="Nomor Telepon" />
+              </div>
+              <div class="form-group">
+                <select name="productInterest" id="productInterestSelect">
+                  <option value="">Pilih Model yang Diminati</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <textarea
+                  name="message"
+                  placeholder="Pesan / Pertanyaan *"
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-error" id="contactFormError"></div>
+              <button type="submit" class="btn-primary" id="contactSubmitBtn">
+                KIRIM PESAN
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-logo">AURA<span>EV</span></div>
+            <p>&copy; 2026 AURA EV. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+
+      <!-- ORDER MODAL -->
+      <div class="modal" id="orderModal">
+        <div class="modal-content">
+          <button class="modal-close" onclick="closeOrderModal()">
+            &times;
+          </button>
+          <h2 class="modal-title">PILIH UNIT</h2>
+          <form id="orderForm" onsubmit="addCurrentOrderToCart(event)">
+            <div class="form-group">
+              <label>Model yang Dipilih</label>
+              <input type="text" id="orderModelName" readonly />
+            </div>
+            <div class="form-group">
+              <label>Jumlah Beli Unit *</label>
+              <div style="display: flex; align-items: center; gap: 0.75rem">
+                <button
+                  type="button"
+                  onclick="changeQuantity(-1)"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    background: var(--dark-bg);
+                    color: white;
+                    border-radius: 5px;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                  "
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  id="orderQuantity"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  readonly
+                  style="
+                    text-align: center;
+                    width: 70px;
+                    padding: 0.5rem;
+                    background: var(--dark-bg);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 5px;
+                    color: white;
+                    font-size: 1rem;
+                  "
+                />
+                <button
+                  type="button"
+                  onclick="changeQuantity(1)"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    background: var(--dark-bg);
+                    color: white;
+                    border-radius: 5px;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                  "
+                >
+                  +
+                </button>
+                <span
+                  id="orderStockInfo"
+                  style="color: var(--text-gray); font-size: 0.85rem"
+                ></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Warna Pilihan</label>
+              <input type="text" id="orderColor" readonly />
+            </div>
+            <div class="form-error" id="orderFormError"></div>
+            <button type="submit" class="btn-primary" id="orderSubmitBtn">
+              TAMBAH KE KERANJANG
+            </button>
+          </form>
+        </div>
+      </div>
+      <div
+        class="modal-overlay"
+        id="modalOverlay"
+        onclick="closeOrderModal()"
+      ></div>
+
+      <!-- TEST DRIVE MODAL -->
+      <div class="modal" id="testDriveModal">
+        <div class="modal-content">
+          <button class="modal-close" onclick="closeTestDriveModal()">
+            &times;
+          </button>
+          <h2 class="modal-title">PESAN TEST DRIVE</h2>
+          <p
+            style="
+              color: var(--text-gray);
+              margin-bottom: 1.5rem;
+              font-size: 0.9rem;
+            "
+          >
+            📍 Dealer AURA EV - Jakarta
+          </p>
+          <form id="testDriveForm" onsubmit="submitTestDrive(event)">
+            <div class="form-group">
+              <label>Nama Lengkap *</label>
+              <input type="text" name="name" required />
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label>Nomor HP *</label>
+              <input type="tel" name="phone" required />
+            </div>
+            <div class="form-group">
+              <label>Model Kendaraan</label>
+              <input type="text" id="tdProductName" readonly />
+            </div>
+            <div class="form-group">
+              <label>Tanggal Test Drive *</label>
+              <input type="date" name="test_drive_date" id="tdDate" required />
+            </div>
+            <div class="form-error" id="testDriveFormError"></div>
+            <button type="submit" class="btn-primary" id="testDriveSubmitBtn">
+              KONFIRMASI TEST DRIVE
+            </button>
+          </form>
+        </div>
+      </div>
+      <div
+        class="modal-overlay"
+        id="testDriveOverlay"
+        onclick="closeTestDriveModal()"
+      ></div>
+
+      <!-- TOAST -->
+      <div class="toast-container" id="toastContainer"></div>
+    </div>
+    <!-- /main-view -->
+
+    <!-- ============================================
+         CATEGORY VIEW
+         ============================================ -->
+    <div id="category-view">
+      <nav class="navbar">
+        <div class="nav-container">
+          <div
+            class="nav-logo"
+            onclick="showMainViewFromCategory()"
+            style="cursor: pointer"
+          >
+            AURA<span>EV</span>
+          </div>
+          <div class="nav-links">
+            <a
+              onclick="
+                showMainViewFromCategory();
+                scrollToSection('home');
+              "
+              style="cursor: pointer"
+              >BERANDA</a
+            >
+            <a
+              onclick="
+                showMainViewFromCategory();
+                scrollToSection('kategori');
+              "
+              style="cursor: pointer"
+              >KATEGORI</a
+            >
+            <a
+              onclick="
+                showMainViewFromCategory();
+                scrollToSection('katalog');
+              "
+              style="cursor: pointer"
+              >KATALOG</a
+            >
+            <a
+              onclick="
+                showMainViewFromCategory();
+                scrollToSection('kontak');
+              "
+              style="cursor: pointer"
+              >KONTAK</a
+            >
+          </div>
+          <div
+            class="nav-cta"
+            style="display: flex; align-items: center; gap: 0.75rem"
+          >
+            <div class="nav-search">
+              <button
+                type="button"
+                class="search-toggle-btn"
+                onclick="toggleSearch(this)"
+                aria-label="Cari kendaraan"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              </button>
+              <div class="search-box">
+                <input
+                  type="text"
+                  class="search-input"
+                  placeholder="Cari kendaraan..."
+                  oninput="handleSearchInput(this)"
+                  onkeydown="handleSearchKeydown(event, this)"
+                  onclick="event.stopPropagation()"
+                />
+              </div>
+              <div class="search-results"></div>
+            </div>
+            <button
+              onclick="openCartModal()"
+              class="cart-toggle-btn"
+              aria-label="Keranjang belanja"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path
+                  d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                />
+              </svg>
+              <span class="cart-badge" id="cartBadgeCategory">0</span>
+            </button>
+            <button
+              onclick="toggleTheme()"
+              class="theme-toggle-btn"
+              aria-label="Toggle theme"
+            >
+              <span class="theme-toggle-track">
+                <span class="theme-toggle-thumb">
+                  <img
+                    src="images/darkmode.svg"
+                    class="theme-icon"
+                    alt="Theme icon"
+                  />
+                </span>
+              </span>
+            </button>
+            <button
+              onclick="handleLogout()"
+              style="
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: white;
+                padding: 0.5rem 0.8rem;
+                border-radius: 6px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.85rem;
+                transition: all 0.3s;
+              "
+              onmouseover="this.style.borderColor = '#4a90d9'"
+              onmouseout="this.style.borderColor = 'rgba(255,255,255,0.3)'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              LOGOUT
+            </button>
+          </div>
+          <button
+            class="hamburger"
+            onclick="toggleMobileMenu()"
+            aria-label="Toggle menu"
+          >
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </nav>
+
+      <section class="category-hero">
+        <div class="category-hero-lines"></div>
+        <div class="container">
+          <div class="category-hero-content">
+            <div class="breadcrumb">
+              <a onclick="showMainViewFromCategory()">Beranda</a>
+              <span class="breadcrumb-sep">›</span>
+              <a
+                onclick="
+                  showMainViewFromCategory();
+                  scrollToSection('kategori');
+                "
+                >Kategori</a
+              >
+              <span class="breadcrumb-sep">›</span>
+              <span id="catBreadcrumbCurrent">...</span>
+            </div>
+            <h1 class="category-page-title" id="catPageTitle">
+              MEMUAT<span>...</span>
+            </h1>
+            <p class="category-page-subtitle" id="catPageSubtitle">
+              Kendaraan listrik premium pilihan terbaik
+            </p>
+            <div
+              class="product-count-badge"
+              id="catProductCountBadge"
+              style="display: none"
+            >
+              <span id="catProductCountText">0 Produk Tersedia</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="products-section">
+        <div class="container">
+          <div class="cat-loading-state" id="catLoadingState">
+            <div class="spinner"></div>
+            <p style="color: #a0a0a0; margin-top: 1rem">Memuat produk...</p>
+          </div>
+          <div class="cat-empty-state" id="catErrorState" style="display: none">
+            <div style="font-size: 4rem">⚠️</div>
+            <h3>Gagal Memuat Produk</h3>
+            <p>Silakan coba lagi.</p>
+            <button
+              class="btn-primary"
+              style="margin-top: 1.5rem"
+              onclick="retryLoadCategory()"
+            >
+              COBA LAGI
+            </button>
+          </div>
+          <div class="cat-empty-state" id="catEmptyState" style="display: none">
+            <div style="font-size: 4rem">🔍</div>
+            <h3>Belum Ada Produk</h3>
+            <p>Produk untuk kategori ini belum tersedia.</p>
+            <button
+              class="btn-primary"
+              style="margin-top: 1.5rem"
+              onclick="
+                showMainViewFromCategory();
+                scrollToSection('kategori');
+              "
+            >
+              LIHAT KATEGORI LAIN
+            </button>
+          </div>
+          <div
+            class="products-grid"
+            id="catProductsGrid"
+            style="display: none"
+          ></div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-logo">AURA<span>EV</span></div>
+            <p>&copy; 2026 AURA EV. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+
+      <!-- CATEGORY ORDER MODAL -->
+      <div class="modal" id="catOrderModal">
+        <div class="modal-content">
+          <button class="modal-close" onclick="catCloseOrderModal()">
+            &times;
+          </button>
+          <h2 class="modal-title">KONFIRMASI PESANAN</h2>
+          <div class="modal-product-info" id="catModalProductInfo">
+            <img
+              src=""
+              alt=""
+              class="modal-product-img"
+              id="catModalProductImg"
+            />
+            <div>
+              <div class="modal-product-name" id="catModalProductName">-</div>
+              <div class="modal-product-price" id="catModalProductPrice">-</div>
+            </div>
+          </div>
+          <div class="modal-color-picker">
+            <label>Pilih Warna</label>
+            <div class="modal-color-options" id="catModalColorOptions"></div>
+            <div class="color-name-display" id="catColorNameDisplay"></div>
+          </div>
+          <form id="catOrderForm" onsubmit="catAddToCart(event)">
+            <input type="hidden" id="catHiddenProductId" />
+            <input type="hidden" id="catHiddenSelectedColor" />
+            <div class="form-group">
+              <label>Jumlah Unit *</label>
+              <div style="display: flex; align-items: center; gap: 0.75rem">
+                <button
+                  type="button"
+                  onclick="catChangeQuantity(-1)"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    background: #0a0a0a;
+                    color: white;
+                    border-radius: 5px;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                  "
+                >
+                  −
+                </button>
+                <input
+                  type="number"
+                  id="catOrderQuantity"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  readonly
+                  style="
+                    text-align: center;
+                    width: 70px;
+                    padding: 0.5rem;
+                    background: #0a0a0a;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 5px;
+                    color: white;
+                    font-size: 1rem;
+                  "
+                />
+                <button
+                  type="button"
+                  onclick="catChangeQuantity(1)"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    background: #0a0a0a;
+                    color: white;
+                    border-radius: 5px;
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                  "
+                >
+                  +
+                </button>
+                <span
+                  id="catOrderStockInfo"
+                  style="color: #a0a0a0; font-size: 0.85rem"
+                ></span>
+              </div>
+            </div>
+            <div class="form-error" id="catOrderFormError"></div>
+            <button
+              type="submit"
+              class="btn-primary"
+              id="catOrderSubmitBtn"
+              style="width: 100%; padding: 1rem"
+            >
+              TAMBAH KE KERANJANG
+            </button>
+          </form>
+        </div>
+      </div>
+      <div
+        class="modal-overlay"
+        id="catModalOverlay"
+        onclick="catCloseOrderModal()"
+      ></div>
+    </div>
+    <!-- /category-view -->
+
+    <!-- PAYMENT MODAL -->
+    <div class="modal" id="paymentModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closePaymentModal()">
+          &times;
+        </button>
+        <h2 class="modal-title">PEMBAYARAN</h2>
+        <div id="paymentSummaryView">
+          <p style="color: var(--text-gray); margin-bottom: 1.5rem">
+            Pesanan Anda berhasil dibuat. Selesaikan pembayaran untuk memproses
+            pesanan.
+          </p>
+          <div
+            style="
+              background: var(--dark-bg);
+              border: 1px solid rgba(255, 255, 255, 0.1);
+              border-radius: 10px;
+              padding: 1.5rem;
+              margin-bottom: 1.5rem;
+            "
+          >
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+              "
+            >
+              <span style="color: var(--text-gray)">Produk</span>
+              <span
+                id="paymentProductName"
+                style="font-weight: 600; text-align: right"
+                >-</span
+              >
+            </div>
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 0.5rem;
+              "
+            >
+              <span style="color: var(--text-gray)">Jumlah</span>
+              <span id="paymentQuantity">-</span>
+            </div>
+            <hr
+              style="border-color: rgba(255, 255, 255, 0.1); margin: 1rem 0"
+            />
+            <div style="display: flex; justify-content: space-between">
+              <span style="color: var(--text-gray)">Total Bayar</span>
+              <span
+                id="paymentTotalAmount"
+                style="
+                  font-size: 1.4rem;
+                  font-weight: bold;
+                  color: var(--primary-color);
+                "
+                >Rp 0</span
+              >
+            </div>
+          </div>
+          <div class="form-error" id="paymentError"></div>
+          <button
+            type="button"
+            class="btn-primary"
+            id="paymentPayBtn"
+            style="width: 100%"
+            onclick="processFakePayment()"
+          >
+            BAYAR SEKARANG
+          </button>
+        </div>
+        <div
+          id="paymentSuccessView"
+          style="display: none; text-align: center; padding: 1rem 0"
+        >
+          <div class="payment-success-icon">
+            <svg viewBox="0 0 52 52" width="80" height="80">
+              <circle
+                class="success-circle"
+                cx="26"
+                cy="26"
+                r="24"
+                fill="none"
+              />
+              <path class="success-check" fill="none" d="M14 27l7 7 16-16" />
+            </svg>
+          </div>
+          <h3 style="margin-bottom: 0.5rem">Pembayaran Berhasil!</h3>
+          <p style="color: var(--text-gray); margin-bottom: 1.5rem">
+            Terima kasih, pesanan Anda sedang diproses.
+          </p>
+
+          <div class="receipt-card" id="receiptCard">
+            <div class="receipt-header">
+              <div>
+                <p class="receipt-brand">AURA<span>EV</span></p>
+                <p class="receipt-subtle">Dealer AURA EV - Jakarta</p>
+              </div>
+              <span class="receipt-badge-paid">LUNAS</span>
+            </div>
+
+            <div class="receipt-meta">
+              <span>No. Invoice <strong id="receiptInvoiceNo">-</strong></span>
+              <span id="receiptDate">-</span>
+            </div>
+
+            <div class="receipt-section">
+              <p class="receipt-subtle">Pelanggan</p>
+              <p class="receipt-strong" id="receiptCustomerName">-</p>
+              <p class="receipt-subtle" id="receiptCustomerContact">-</p>
+            </div>
+
+            <div class="receipt-section">
+              <div id="receiptItemsList"></div>
+            </div>
+
+            <div class="receipt-section">
+              <div
+                class="receipt-row receipt-subtle"
+                style="font-size: 0.85rem"
+              >
+                <span>Metode Pembayaran</span>
+                <span>Transfer Bank</span>
+              </div>
+              <div class="receipt-row receipt-total">
+                <span>Total Bayar</span>
+                <span id="receiptTotal">Rp 0</span>
+              </div>
+            </div>
+
+            <p class="receipt-footnote">
+              Struk dicetak otomatis oleh sistem AURA EV
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem">
+            <button
+              type="button"
+              class="btn-secondary"
+              style="flex: 1"
+              onclick="downloadReceiptPDF()"
+            >
+              UNDUH PDF
+            </button>
+            <button
+              type="button"
+              class="btn-primary"
+              style="flex: 1"
+              onclick="closePaymentModal()"
+            >
+              TUTUP
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal-overlay"
+      id="paymentModalOverlay"
+      onclick="closePaymentModal()"
+    ></div>
+
+    <!-- CART MODAL -->
+    <div class="modal" id="cartModal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeCartModal()">&times;</button>
+        <h2 class="modal-title">KERANJANG BELANJA</h2>
+
+        <div class="cart-empty-state" id="cartEmptyState">
+          <p>Keranjang kamu masih kosong.</p>
+          <p style="font-size: 0.85rem; margin-top: 0.5rem">
+            Pilih kendaraan di katalog dan tambahkan ke keranjang.
+          </p>
+        </div>
+
+        <div class="cart-items-list" id="cartItemsList"></div>
+
+        <div id="cartCheckoutSection" style="display: none">
+          <div class="cart-total-row">
+            <span>Total Belanja</span>
+            <span id="cartTotalAmount">Rp 0</span>
+          </div>
+
+          <form id="cartCheckoutForm" onsubmit="submitCartCheckout(event)">
+            <div class="form-group">
+              <label>Nama Lengkap *</label>
+              <input
+                type="text"
+                name="customerName"
+                required
+                placeholder="Masukkan nama lengkap"
+              />
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input
+                type="email"
+                name="customerEmail"
+                required
+                placeholder="email@contoh.com"
+              />
+            </div>
+            <div class="form-group">
+              <label>Nomor HP *</label>
+              <input
+                type="tel"
+                name="customerPhone"
+                required
+                placeholder="08xxxxxxxxxx"
+              />
+            </div>
+            <div class="form-group">
+              <label>Alamat Pengiriman</label>
+              <textarea
+                name="address"
+                rows="3"
+                placeholder="Isi alamat lengkap (opsional)"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label>Catatan Tambahan</label>
+              <textarea
+                name="notes"
+                rows="2"
+                placeholder="Catatan untuk admin (opsional)"
+              ></textarea>
+            </div>
+            <div class="form-error" id="cartCheckoutError"></div>
+            <button
+              type="submit"
+              class="btn-primary"
+              id="cartCheckoutBtn"
+              style="width: 100%; padding: 1rem"
+            >
+              BAYAR SEKARANG
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal-overlay"
+      id="cartModalOverlay"
+      onclick="closeCartModal()"
+    ></div>
+
+    <!-- ============================================
+         RIWAYAT PEMESANAN (FLOATING BUTTON + MODAL)
+         Muncul otomatis setelah pembeli melakukan transaksi
+         ============================================ -->
+    <button
+      type="button"
+      class="order-history-fab"
+      id="orderHistoryFab"
+      onclick="openOrderHistoryModal()"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+        ></path>
+        <rect x="9" y="3" width="6" height="4" rx="1"></rect>
+        <path d="M9 12h6M9 16h6"></path>
+      </svg>
+      <span class="oh-fab-label">Riwayat Pesanan</span>
+      <span class="order-history-fab-badge" id="orderHistoryFabBadge"
+        >0</span
+      >
+    </button>
+
+    <div class="modal" id="orderHistoryModal">
+      <div class="modal-content" style="max-width: 560px">
+        <button class="modal-close" onclick="closeOrderHistoryModal()">
+          &times;
+        </button>
+
+        <div id="orderHistoryListView">
+          <h2 class="modal-title">RIWAYAT PESANAN</h2>
+          <div class="oh-list" id="orderHistoryList"></div>
+          <div class="oh-empty" id="orderHistoryEmpty" style="display: none">
+            Belum ada riwayat pemesanan.
+          </div>
+        </div>
+
+        <div id="orderHistoryDetailView" style="display: none">
+          <button class="oh-back-btn" onclick="backToOrderHistoryList()">
+            ← Kembali ke Riwayat
+          </button>
+          <div class="receipt-card" id="orderHistoryDetailCard"></div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal-overlay"
+      id="orderHistoryModalOverlay"
+      onclick="closeOrderHistoryModal()"
+    ></div>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+
+    <script>
+      // =============================================
+      // VIEW HELPERS
+      // =============================================
+
+      function showAuthView() {
+        document.getElementById("auth-view").classList.add("active");
+        document.getElementById("main-view").classList.remove("active");
+        document.getElementById("category-view").classList.remove("active");
+      }
+      function showMainView() {
+        document.getElementById("auth-view").classList.remove("active");
+        document.getElementById("main-view").classList.add("active");
+        document.getElementById("category-view").classList.remove("active");
+      }
+
+      // Switch cards inside auth view
+      function showLogin() {
+        document.getElementById("register-panel").style.display = "none";
+        document.getElementById("login-panel").style.display = "block";
+        document.getElementById("authSubtitle").textContent =
+          "Masuk ke akun kamu";
+        // reset
+        document.getElementById("loginForm").reset();
+        document.getElementById("loginAlertError").classList.remove("show");
+        document.getElementById("loginAlertSuccess").classList.remove("show");
+      }
+
+      function showRegister() {
+        document.getElementById("login-panel").style.display = "none";
+        document.getElementById("register-panel").style.display = "block";
+        document.getElementById("authSubtitle").textContent =
+          "Buat akun baru kamu";
+        // reset
+        document.getElementById("registerForm").reset();
+        document.getElementById("registerAlertError").classList.remove("show");
+        document.getElementById("registerFormState").style.display = "block";
+        document.getElementById("registerSuccessState").style.display = "none";
+      }
+
+      // =============================================
+      // LOADING OVERLAY
+      // =============================================
+
+      function showLoading(title, sub) {
+        document.getElementById("loading-title").textContent =
+          title || "MEMPROSES";
+        document.getElementById("loading-sub").textContent =
+          sub || "Mohon tunggu sebentar...";
+        document.getElementById("loading-overlay").classList.add("show");
+      }
+      function hideLoading() {
+        document.getElementById("loading-overlay").classList.remove("show");
+      }
+
+      // =============================================
+      // SESSION CHECK ON PAGE LOAD
+      // =============================================
+
+      // Flag to prevent double-init if session already existed
+      let _appInitialized = false;
+
+      window.addEventListener("DOMContentLoaded", async () => {
+        const {
+          data: { session },
+        } = await window.supabase.auth.getSession();
+        if (session) {
+          showMainView();
+          // initializeApp() will be called by script.js DOMContentLoaded handler
+          _appInitialized = true;
+        } else {
+          showAuthView();
+        }
+      });
+
+      // =============================================
+      // LOGIN
+      // =============================================
+
+      async function handleLogin(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const btn = document.getElementById("loginBtn");
+        const alertError = document.getElementById("loginAlertError");
+        const alertSuccess = document.getElementById("loginAlertSuccess");
+
+        alertError.classList.remove("show");
+        alertSuccess.classList.remove("show");
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="btn-spinner"></span>MEMPROSES...';
+
+        try {
+          const { data, error } = await window.supabase.auth.signInWithPassword(
+            { email, password },
+          );
+          if (error) throw error;
+
+          alertSuccess.textContent = "Login berhasil! Mengalihkan...";
+          alertSuccess.classList.add("show");
+
+          setTimeout(() => {
+            showLoading("LOGGING IN", "Menyiapkan halaman utama...");
+            setTimeout(() => {
+              hideLoading();
+              showMainView();
+              btn.disabled = false;
+              btn.textContent = "MASUK";
+              alertSuccess.classList.remove("show");
+
+              // Trigger app init jika belum berjalan
+              if (!_appInitialized && typeof initializeApp === "function") {
+                _appInitialized = true;
+                initializeApp();
+              }
+            }, 1200);
+          }, 400);
+        } catch (error) {
+          let msg = "Login gagal. Periksa email dan password kamu.";
+          if (error.message.includes("Invalid login"))
+            msg = "Email atau password salah.";
+          if (error.message.includes("Email not confirmed"))
+            msg = "Email belum dikonfirmasi. Cek inbox kamu.";
+
+          alertError.textContent = msg;
+          alertError.classList.add("show");
+          btn.disabled = false;
+          btn.textContent = "MASUK";
+        }
+      }
+
+      // =============================================
+      // REGISTER
+      // =============================================
+
+      async function handleRegister(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const fullName = form.fullName.value.trim();
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        const confirmPassword = form.confirmPassword.value;
+        const btn = document.getElementById("registerBtn");
+        const alertError = document.getElementById("registerAlertError");
+
+        alertError.classList.remove("show");
+
+        if (password !== confirmPassword) {
+          alertError.textContent =
+            "Password dan konfirmasi password tidak sama.";
+          alertError.classList.add("show");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<span class="btn-spinner"></span>MEMPROSES...';
+
+        try {
+          const { data, error } = await window.supabase.auth.signUp({
+            email,
+            password,
+            options: { data: { full_name: fullName } },
+          });
+          if (error) throw error;
+
+          // Tampilkan success state
+          document.getElementById("registerFormState").style.display = "none";
+          document.getElementById("registeredEmail").textContent = email;
+          document.getElementById("registerSuccessState").style.display =
+            "block";
+        } catch (error) {
+          let msg = "Pendaftaran gagal. Silakan coba lagi.";
+          if (error.message.includes("already registered"))
+            msg = "Email ini sudah terdaftar. Silakan login.";
+          if (error.message.includes("Password should be"))
+            msg = "Password minimal 6 karakter.";
+          if (error.message.includes("valid email"))
+            msg = "Format email tidak valid.";
+
+          alertError.textContent = msg;
+          alertError.classList.add("show");
+          btn.disabled = false;
+          btn.textContent = "DAFTAR SEKARANG";
+        }
+      }
+
+      // =============================================
+      // LOGOUT
+      // =============================================
+
+      async function handleLogout() {
+        showLoading("LOGGING OUT", "Sampai jumpa lagi...");
+        await window.supabase.auth.signOut();
+        _appInitialized = false;
+        setTimeout(() => {
+          hideLoading();
+          showLogin();
+          showAuthView();
+        }, 1200);
+      }
+
+      // =============================================
+      // CATEGORY VIEW LOGIC
+      // =============================================
+
+      let catProducts = [];
+      let catSelectedProduct = null;
+      let catSelectedColor = "";
+      let catCurrentSlug = "";
+
+      const CAT_COLOR_MAP = {
+        hitam: "#1a1a1a",
+        putih: "#f5f5f5",
+        merah: "#dc2626",
+        biru: "#2563eb",
+        silver: "#94a3b8",
+        abu: "#6b7280",
+        "abu-abu": "#6b7280",
+        gold: "#d97706",
+        hijau: "#16a34a",
+        kuning: "#ca8a04",
+        orange: "#ea580c",
+        pink: "#ec4899",
+        ungu: "#9333ea",
+        coklat: "#92400e",
+      };
+
+      function colorNameToHex(name) {
+        const key = name
+          .toLowerCase()
+          .split(" ")[0]
+          .replace(
+            /metalik|mutiara|midnight|passion|elektrik|atlantik|atlantic|titanium|prestige|phantom|teal|solid|pearl|multi-coat/g,
+            "",
+          )
+          .trim();
+        return CAT_COLOR_MAP[key] || "#4a90d9";
+      }
+
+      function showCategoryView(slug) {
+        catCurrentSlug = slug;
+        document.getElementById("auth-view").classList.remove("active");
+        document.getElementById("main-view").classList.remove("active");
+        document.getElementById("category-view").classList.add("active");
+        window.scrollTo(0, 0);
+        catProducts = [];
+        catSelectedProduct = null;
+        document.getElementById("catLoadingState").style.display = "block";
+        document.getElementById("catErrorState").style.display = "none";
+        document.getElementById("catEmptyState").style.display = "none";
+        document.getElementById("catProductsGrid").style.display = "none";
+        document.getElementById("catProductCountBadge").style.display = "none";
+        loadCategoryAndProducts(slug);
+      }
+
+      function showMainViewFromCategory() {
+        document.getElementById("category-view").classList.remove("active");
+        document.getElementById("main-view").classList.add("active");
+        window.scrollTo(0, 0);
+      }
+
+      function scrollToSection(id) {
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      }
+
+      function retryLoadCategory() {
+        document.getElementById("catErrorState").style.display = "none";
+        document.getElementById("catLoadingState").style.display = "block";
+        loadCategoryAndProducts(catCurrentSlug);
+      }
+
+      async function loadCategoryAndProducts(slug) {
+        try {
+          const { data: catData, error: catError } = await window.supabase
+            .from("categories")
+            .select("*")
+            .eq("slug", slug)
+            .single();
+
+          if (catError || !catData) {
+            showMainViewFromCategory();
+            scrollToSection("kategori");
+            return;
+          }
+
+          const words = catData.name.split(" ");
+          const last = words.pop();
+          const rest = words.join(" ");
+          document.getElementById("catPageTitle").innerHTML = rest
+            ? `${rest} <span>${last}</span>`
+            : `<span>${catData.name}</span>`;
+          document.getElementById("catBreadcrumbCurrent").textContent =
+            catData.name;
+          document.title = `AURA EV - ${catData.name}`;
+
+          const subtitles = {
+            mobil:
+              "Sedan, SUV, dan hatchback listrik premium dengan teknologi terdepan",
+            motor: "Skuter dan motor listrik efisien untuk mobilitas urban",
+            sepeda: "Sepeda listrik ramah lingkungan untuk gaya hidup aktif",
+            truk: "Kendaraan niaga listrik bertenaga untuk kebutuhan komersial",
+          };
+          document.getElementById("catPageSubtitle").textContent =
+            subtitles[slug] || "Kendaraan listrik premium pilihan terbaik";
+
+          const { data: prodData, error: prodError } = await window.supabase
+            .from("products")
+            .select("*")
+            .eq("category_id", catData.id)
+            .eq("is_active", true)
+            .order("id", { ascending: true });
+
+          if (prodError) throw prodError;
+
+          catProducts = prodData || [];
+          document.getElementById("catLoadingState").style.display = "none";
+
+          if (catProducts.length === 0) {
+            document.getElementById("catEmptyState").style.display = "block";
+            return;
+          }
+
+          document.getElementById("catProductCountText").textContent =
+            `${catProducts.length} Produk Tersedia`;
+          document.getElementById("catProductCountBadge").style.display =
+            "inline-flex";
+          renderCatProducts(catProducts);
+        } catch (err) {
+          console.error("Category load error:", err);
+          document.getElementById("catLoadingState").style.display = "none";
+          document.getElementById("catErrorState").style.display = "block";
+        }
+      }
+
+      function renderCatProducts(prods) {
+        const grid = document.getElementById("catProductsGrid");
+        grid.style.display = "grid";
+        grid.innerHTML = prods
+          .map((product) => {
+            const imgSrc =
+              product.images && product.images.length > 0
+                ? product.images[0]
+                : "images/placeholder.png";
+            const colors = product.colors || [];
+            const displayColors = colors.slice(0, 4);
+            const extraColors = colors.length > 4 ? colors.length - 4 : 0;
+            const stockClass =
+              product.stock_status === "in_stock"
+                ? "in-stock"
+                : product.stock_status === "low_stock"
+                  ? "low-stock"
+                  : "out-of-stock";
+            const stockLabel =
+              product.stock_status === "in_stock"
+                ? "Stok Tersedia"
+                : product.stock_status === "low_stock"
+                  ? "Stok Terbatas"
+                  : product.stock_status === "out_of_stock"
+                    ? "Habis"
+                    : "Pre-Order";
+            const swatches = displayColors
+              .map(
+                (c) =>
+                  `<div class="product-color-dot" style="background:${colorNameToHex(c)}" title="${c}"></div>`,
+              )
+              .join("");
+            return `
+                <div class="product-card" onclick="catOpenOrderModal(${product.id})">
+                    <div class="product-image-wrap">
+                        <img src="${imgSrc}" alt="${product.name}" class="product-img"
+                             onerror="this.src='images/placeholder.png'" loading="lazy">
+                        <span class="stock-badge ${stockClass}">${stockLabel}</span>
+                    </div>
+                    <div class="product-body">
+                        <div class="product-brand">${product.brand || ""}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-specs-mini">
+                            ${product.battery_capacity ? `<div class="spec-mini"><div class="spec-mini-label">Baterai</div><div class="spec-mini-value">${product.battery_capacity}</div></div>` : ""}
+                            ${product.range_km ? `<div class="spec-mini"><div class="spec-mini-label">Jangkauan</div><div class="spec-mini-value">${product.range_km}</div></div>` : ""}
+                            ${product.max_speed ? `<div class="spec-mini"><div class="spec-mini-label">Kecepatan Max</div><div class="spec-mini-value">${product.max_speed}</div></div>` : ""}
+                            ${product.charging_time ? `<div class="spec-mini"><div class="spec-mini-label">Charging</div><div class="spec-mini-value">${product.charging_time.split("(")[0].trim()}</div></div>` : ""}
+                        </div>
+                        ${colors.length > 0 ? `<div class="product-colors">${swatches}${extraColors > 0 ? `<span class="product-colors-more">+${extraColors} warna</span>` : ""}</div>` : ""}
+                        <div class="product-footer">
+                            <div class="product-price">${catFormatPrice(product.price)}</div>
+                            <button class="btn-order-card"
+                                    onclick="event.stopPropagation(); catOpenOrderModal(${product.id})">
+                                BELI SEKARANG
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+          })
+          .join("");
+      }
+
+      function catOpenOrderModal(productId) {
+        const product = catProducts.find((p) => p.id === productId);
+        if (!product) return;
+        catSelectedProduct = product;
+
+        const imgSrc =
+          product.images && product.images.length > 0
+            ? product.images[0]
+            : "images/placeholder.png";
+        document.getElementById("catModalProductImg").src = imgSrc;
+        document.getElementById("catModalProductName").textContent =
+          product.name;
+        document.getElementById("catModalProductPrice").textContent =
+          catFormatPrice(product.price);
+        document.getElementById("catHiddenProductId").value = product.id;
+
+        const colors = product.colors || [];
+        const colorOptsEl = document.getElementById("catModalColorOptions");
+        colorOptsEl.innerHTML = colors
+          .map(
+            (c, i) =>
+              `<div class="modal-color-opt ${i === 0 ? "active" : ""}"
+                  style="background:${colorNameToHex(c)}" title="${c}"
+                  onclick="catSelectColor(this,'${c}')"></div>`,
+          )
+          .join("");
+
+        if (colors.length > 0) {
+          catSelectedColor = colors[0];
+          document.getElementById("catHiddenSelectedColor").value = colors[0];
+          document.getElementById("catColorNameDisplay").textContent =
+            colors[0];
+        } else {
+          catSelectedColor = "-";
+          document.getElementById("catColorNameDisplay").textContent = "";
+        }
+
+        document.getElementById("catOrderQuantity").value = 1;
+        document.getElementById("catOrderStockInfo").textContent =
+          `Stok tersedia: ${product.stock} unit`;
+        document.getElementById("catOrderModal").classList.add("active");
+        document.getElementById("catModalOverlay").classList.add("active");
+        document.body.style.overflow = "hidden";
+        document.getElementById("catOrderForm").reset();
+        document.getElementById("catOrderFormError").classList.remove("show");
+      }
+
+      function catOpenOrderModalFirst() {
+        if (catProducts.length > 0) catOpenOrderModal(catProducts[0].id);
+      }
+
+      function catSelectColor(el, name) {
+        document
+          .querySelectorAll(".modal-color-opt")
+          .forEach((o) => o.classList.remove("active"));
+        el.classList.add("active");
+        catSelectedColor = name;
+        document.getElementById("catHiddenSelectedColor").value = name;
+        document.getElementById("catColorNameDisplay").textContent = name;
+      }
+
+      function catCloseOrderModal() {
+        document.getElementById("catOrderModal").classList.remove("active");
+        document.getElementById("catModalOverlay").classList.remove("active");
+        document.body.style.overflow = "auto";
+      }
+
+      function catChangeQuantity(delta) {
+        const input = document.getElementById("catOrderQuantity");
+        if (!input || !catSelectedProduct) return;
+        let val = parseInt(input.value) + delta;
+        val = Math.max(1, Math.min(val, catSelectedProduct.stock));
+        input.value = val;
+      }
+
+      function catAddToCart(event) {
+        event.preventDefault();
+        const btn = document.getElementById("catOrderSubmitBtn");
+        const errorEl = document.getElementById("catOrderFormError");
+        if (!catSelectedProduct) return;
+
+        errorEl.classList.remove("show");
+
+        const quantity =
+          parseInt(document.getElementById("catOrderQuantity").value) || 1;
+
+        if (catSelectedProduct.stock <= 0) {
+          errorEl.textContent = "Produk ini sudah habis stoknya.";
+          errorEl.classList.add("show");
+          return;
+        }
+        if (quantity > catSelectedProduct.stock) {
+          errorEl.textContent = `Stok tidak cukup. Tersedia: ${catSelectedProduct.stock} unit.`;
+          errorEl.classList.add("show");
+          return;
+        }
+
+        const imgSrc =
+          catSelectedProduct.images && catSelectedProduct.images.length > 0
+            ? catSelectedProduct.images[0]
+            : "images/placeholder.png";
+
+        addToCart({
+          productId: catSelectedProduct.id,
+          name: catSelectedProduct.name,
+          image: imgSrc,
+          price: parseFloat(catSelectedProduct.price),
+          color: catSelectedColor || "-",
+          quantity,
+          maxStock: catSelectedProduct.stock,
+        });
+
+        catCloseOrderModal();
+        showToast(
+          `✓ ${catSelectedProduct.name} ditambahkan ke keranjang`,
+          "success",
+        );
+      }
+
+      function catFormatPrice(price) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+        }).format(price);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          catCloseOrderModal();
+          if (typeof closeCartModal === "function") closeCartModal();
+        }
+      });
+    </script>
+
+    <!-- Main Script (katalog, order, kontak, dll) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
