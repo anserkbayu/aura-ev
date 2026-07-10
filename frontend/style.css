@@ -84,6 +84,7 @@ h3,
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .nav-logo {
@@ -509,7 +510,6 @@ h3,
 .car-info {
   padding: 2rem;
   min-width: 0;
-  overflow: hidden;
 }
 
 .car-name {
@@ -582,6 +582,15 @@ h3,
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.car-actions .btn-primary,
+.car-actions .btn-secondary {
+  flex: 1 1 auto;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .car-slider {
@@ -1219,6 +1228,36 @@ h3,
   animation: slideOutRight 0.3s ease forwards;
 }
 
+
+/* ============================================
+   NAV LOGOUT BUTTON
+   ============================================ */
+.nav-logout-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-light);
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-family: "Barlow", sans-serif;
+  transition: var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-logout-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.nav-logout-text {
+  display: inline;
+}
+
 /* ============================================
    NAV SEARCH (Cari Kendaraan)
    ============================================ */
@@ -1588,8 +1627,12 @@ h3,
 
 /* ── Tablet portrait (max 900px) ── */
 @media (max-width: 900px) {
-  .nav-links,
-  .nav-cta {
+  .nav-links {
+    display: none;
+  }
+
+  /* Sembunyikan teks LOGOUT, tampilkan hanya icon di mobile */
+  .nav-logout-text {
     display: none;
   }
 
@@ -1622,11 +1665,14 @@ h3,
   }
 
   .car-actions {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
-  .car-actions button {
-    width: 100%;
+  .car-actions .btn-primary,
+  .car-actions .btn-secondary {
+    flex: 1 1 140px;
+    width: auto;
   }
 
   .contact-content {
@@ -1709,7 +1755,25 @@ h3,
   }
 
   .car-info {
-    padding: 1rem 0;
+    padding: 1.5rem 0;
+  }
+
+  /* Tombol aksi katalog */
+  .car-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .car-actions .btn-primary,
+  .car-actions .btn-secondary {
+    width: 100%;
+    flex: unset;
+    padding: 0.9rem 1.5rem;
+    font-size: 0.9rem;
+    display: block;
+    text-align: center;
+    overflow: visible;
+    white-space: normal;
   }
 
   .car-specs {
@@ -1779,16 +1843,36 @@ h3,
     padding: 0 0.75rem;
   }
 
+  .nav-container {
+    padding: 0.75rem 0.75rem;
+    gap: 0.4rem;
+  }
+
+  .nav-logo {
+    font-size: 1.5rem;
+  }
+
+  /* Di HP kecil: sembunyikan teks LOGOUT, hanya tampilkan ikon */
+  .nav-logout-text {
+    display: none;
+  }
+
+  .nav-logout-btn {
+    padding: 0.45rem 0.6rem;
+    border-radius: 50%;
+    gap: 0;
+  }
+
   .hero-title {
     font-size: 1.8rem;
   }
 
   .section-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .car-name {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .car-display {
@@ -1796,30 +1880,30 @@ h3,
   }
 
   .slider-item {
-    min-width: 120px;
+    min-width: 115px;
   }
 
   .slider-item img {
-    height: 75px;
-  }
-
-  .btn-primary,
-  .btn-secondary,
-  .btn-hero {
-    padding: 0.7rem 1.5rem;
-    font-size: 0.85rem;
-  }
-
-  .nav-container {
-    padding: 0.75rem 1rem;
+    height: 70px;
   }
 
   .car-specs {
     grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .spec-item {
+    padding: 0.75rem;
   }
 
   .spec-value {
     font-size: 1rem;
+  }
+
+  .car-actions .btn-primary,
+  .car-actions .btn-secondary {
+    font-size: 0.85rem;
+    padding: 0.8rem 1.2rem;
   }
 
   .contact-form {
