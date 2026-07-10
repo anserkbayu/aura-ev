@@ -198,6 +198,7 @@ async function loadProducts() {
     contentEl.style.display = "grid";
     renderCatalog();
     displayCar(0);
+    initSliderEdgeDetection(); // auto-scroll & edge-detect
   } catch (error) {
     console.error("❌ Failed to load products:", error);
     loadingEl.innerHTML =
@@ -262,6 +263,9 @@ function displayCar(index) {
   document.querySelectorAll(".slider-item").forEach((item, i) => {
     item.classList.toggle("active", i === index);
   });
+
+  // Auto-scroll slider so active item is centered/visible
+  scrollSliderToActive();
 
   // Show skeleton while loading
   const imgSkeleton = document.getElementById("imageSkeleton");
@@ -347,6 +351,71 @@ function nextCar() {
 function prevCar() {
   currentCarIndex = (currentCarIndex - 1 + models.length) % models.length;
   displayCar(currentCarIndex);
+}
+
+// ============================================
+// SLIDER AUTO-SCROLL
+// ============================================
+
+/**
+ * Scroll the sliderTrack so the active .slider-item is centered
+ * (or at least fully in view). Also sets up an IntersectionObserver
+ * so that whenever the active item touches the left or right edge,
+ * the slider advances automatically to show the neighbor.
+ */
+function scrollSliderToActive() {
+  const track = document.getElementById("sliderTrack");
+  if (!track) return;
+
+  const activeItem = track.querySelector(".slider-item.active");
+  if (!activeItem) return;
+
+  // Center the active item within the scrollable track
+  const trackRect  = track.getBoundingClientRect();
+  const itemRect   = activeItem.getBoundingClientRect();
+  const itemOffset = activeItem.offsetLeft;
+  const itemWidth  = activeItem.offsetWidth;
+  const trackWidth = track.clientWidth;
+
+  const targetScroll = itemOffset - trackWidth / 2 + itemWidth / 2;
+  track.scrollTo({ left: targetScroll, behavior: "smooth" });
+}
+
+/**
+ * IntersectionObserver that watches whether the active slider item
+ * overflows the left or right boundary of the track. If it does,
+ * it auto-advances to the next/previous car so neighbours stay visible.
+ */
+function initSliderEdgeDetection() {
+  const track = document.getElementById("sliderTrack");
+  if (!track) return;
+
+  // Debounce so we don't fire multiple times per scroll event
+  let edgeTimer = null;
+
+  track.addEventListener("scroll", () => {
+    clearTimeout(edgeTimer);
+    edgeTimer = setTimeout(() => {
+      const activeItem = track.querySelector(".slider-item.active");
+      if (!activeItem) return;
+
+      const trackLeft  = track.scrollLeft;
+      const trackRight = trackLeft + track.clientWidth;
+      const itemLeft   = activeItem.offsetLeft;
+      const itemRight  = itemLeft + activeItem.offsetWidth;
+
+      // If active item's RIGHT edge is beyond the visible track right edge → go next
+      if (itemRight > trackRight - 10 && currentCarIndex < models.length - 1) {
+        const nextIndex = (currentCarIndex + 1) % models.length;
+        displayCar(nextIndex);
+      }
+      // If active item's LEFT edge is before the visible track left edge → go prev
+      else if (itemLeft < trackLeft + 10 && currentCarIndex > 0) {
+        const prevIndex = (currentCarIndex - 1 + models.length) % models.length;
+        displayCar(prevIndex);
+      }
+    }, 120);
+  });
 }
 
 // ============================================
