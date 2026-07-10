@@ -342,6 +342,40 @@
       }
 
       /* ============================================
+           AUTH RESPONSIVE
+           ============================================ */
+      @media (max-width: 600px) {
+        #auth-view {
+          padding: 1.5rem 1rem;
+          align-items: flex-start;
+          padding-top: 2rem;
+        }
+
+        .auth-container {
+          max-width: 100%;
+        }
+
+        .auth-card {
+          padding: 1.75rem 1.25rem;
+          border-radius: 12px;
+        }
+
+        .auth-logo {
+          font-size: 2.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .auth-card {
+          padding: 1.25rem 1rem;
+        }
+
+        .auth-btn {
+          padding: 0.85rem;
+        }
+      }
+
+      /* ============================================
            MAIN VIEW
            ============================================ */
       #main-view {
@@ -516,7 +550,7 @@
 
       .products-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
         gap: 2rem;
         margin-top: 2rem;
       }
@@ -835,6 +869,59 @@
 
         .products-grid {
           grid-template-columns: 1fr;
+        }
+
+        .category-hero {
+          min-height: 200px;
+        }
+
+        .category-hero-content {
+          padding: 2rem 0;
+        }
+
+        .products-section {
+          padding: 2.5rem 0 4rem;
+        }
+
+        .product-image-wrap {
+          height: 180px;
+        }
+
+        .product-footer {
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .btn-order-card {
+          width: 100%;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .category-page-title {
+          font-size: 1.8rem;
+          letter-spacing: 2px;
+        }
+
+        .products-grid {
+          gap: 1.25rem;
+        }
+
+        .product-image-wrap {
+          height: 160px;
+        }
+
+        .product-body {
+          padding: 1rem;
+        }
+
+        .product-name {
+          font-size: 1.3rem;
+        }
+
+        .product-price {
+          font-size: 1.2rem;
         }
       }
     </style>
