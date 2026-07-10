@@ -8,7 +8,7 @@
 const isLocal = ["localhost", "127.0.0.1", ""].includes(window.location.hostname);
 const API_BASE = isLocal
   ? "http://localhost:8080/api"
-  : "https://URL_BACKEND_RAILWAY_KAMU.up.railway.app/api";
+  : "https://aura-ev-production-e26a.up.railway.app/api";
 
 // ============================================
 // API HELPER
